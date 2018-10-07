@@ -76,11 +76,6 @@ class Google2FA extends Google2FAPackage
 
         $bacon = new Writer($renderer);
 
-        $bacon->writeFile(
-            $this->getQRCodeUrl($company, $holder, $secret),
-            'qrcode.png'
-        );
-
         $data = $bacon->writeString(
             $this->getQRCodeUrl($company, $holder, $secret),
             $encoding
