@@ -102,7 +102,7 @@ class Google2FA extends Google2FAPackage
     public function getQRCodeInlineV2($company, $holder, $secret, $size = 200, $encoding = 'utf-8')
     {
         $renderer = new ImageRenderer(
-            (new RendererStyle(400))->withSize($size),
+            (new RendererStyle($size))->withSize($size),
             $this->imageBackEnd
         );
 
@@ -116,6 +116,7 @@ class Google2FA extends Google2FAPackage
         if ($this->imageBackEnd instanceof ImagickImageBackEnd) {
             return 'data:image/png;base64,'.base64_encode($data);
         }
+
         return $data;
     }
 
