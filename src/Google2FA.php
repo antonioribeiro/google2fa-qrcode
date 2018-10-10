@@ -3,16 +3,45 @@
 namespace PragmaRX\Google2FAQRCode;
 
 use BaconQrCode\Renderer\Image\Png;
+use BaconQrCode\Renderer\Image\RendererInterface;
 use BaconQrCode\Writer as BaconQrCodeWriter;
 use PragmaRX\Google2FA\Google2FA as Google2FAPackage;
 
 use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\ImageBackEndInterface;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 
 class Google2FA extends Google2FAPackage
 {
+    /**
+     * @var ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     */
+    protected $imageBackEnd;
+
+    /**
+     * Google2FA constructor.
+     *
+     * @param ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     */
+    public function __construct($imageBackEnd = null)
+    {
+        if ($this->getBaconQRCodeVersion() === 1) {
+            if ($imageBackEnd instanceof RendererInterface) {
+                $this->imageBackEnd = $imageBackEnd;
+            } else {
+                $this->imageBackEnd = new Png();
+            }
+        } else {
+            if ($imageBackEnd instanceof ImageBackEndInterface) {
+                $this->imageBackEnd = $imageBackEnd;
+            } else {
+                $this->imageBackEnd = new ImagickImageBackEnd();
+            }
+        }
+    }
+
     /**
      * Generates a QR code data url to display inline.
      *
@@ -46,14 +75,17 @@ class Google2FA extends Google2FAPackage
     {
         $url = $this->getQRCodeUrl($company, $holder, $secret);
 
-        $renderer = new Png();
+        $renderer = $this->imageBackEnd;
         $renderer->setWidth($size);
         $renderer->setHeight($size);
 
         $bacon = new BaconQrCodeWriter($renderer);
         $data = $bacon->writeString($url, $encoding);
 
-        return 'data:image/png;base64,'.base64_encode($data);
+        if ($this->imageBackEnd instanceof Png) {
+            return 'data:image/png;base64,'.base64_encode($data);
+        }
+        return $data;
     }
 
     /**
@@ -71,7 +103,7 @@ class Google2FA extends Google2FAPackage
     {
         $renderer = new ImageRenderer(
             (new RendererStyle(400))->withSize($size),
-            new ImagickImageBackEnd()
+            $this->imageBackEnd
         );
 
         $bacon = new Writer($renderer);
@@ -81,7 +113,10 @@ class Google2FA extends Google2FAPackage
             $encoding
         );
 
-        return 'data:image/png;base64,'.base64_encode($data);
+        if ($this->imageBackEnd instanceof ImagickImageBackEnd) {
+            return 'data:image/png;base64,'.base64_encode($data);
+        }
+        return $data;
     }
 
     /**
