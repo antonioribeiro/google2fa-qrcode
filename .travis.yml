@@ -20,7 +20,7 @@ cache:
     - $HOME/.composer/cache
 
 before_script:
-  - pecl install imagick
+  - yes '' | pecl install imagick
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
