@@ -4,19 +4,19 @@
     <a href="https://packagist.org/packages/pragmarx/google2fa-qrcode"><img alt="Latest Stable Version" src="https://img.shields.io/packagist/v/pragmarx/google2fa-qrcode.svg?style=flat-square"></a>
     <a href="LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
     <a href="https://scrutinizer-ci.com/g/antonioribeiro/google2fa/?branch=master"><img alt="Code Quality" src="https://img.shields.io/scrutinizer/g/antonioribeiro/google2fa.svg?style=flat-square"></a>
-    <a href="https://travis-ci.org/antonioribeiro/google2fa"><img alt="Build" src="https://img.shields.io/travis/antonioribeiro/google2fa.svg?style=flat-square"></a>
+    <a href="https://travis-ci.org/antonioribeiro/google2fa-qrcode"><img alt="Build" src="https://img.shields.io/travis/antonioribeiro/google2fa-qrcode.svg?style=flat-square"></a>
 </p>
 <p align="center">
     <a href="https://packagist.org/packages/pragmarx/google2fa-qrcode"><img alt="Downloads" src="https://img.shields.io/packagist/dt/pragmarx/google2fa-qrcode.svg?style=flat-square"></a>
     <a href="https://scrutinizer-ci.com/g/antonioribeiro/google2fa/?branch=master"><img alt="Coverage" src="https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/google2fa.svg?style=flat-square"></a>
     <a href="https://styleci.io/repos/24296182"><img alt="StyleCI" src="https://styleci.io/repos/24296182/shield"></a>
-    <a href="https://travis-ci.org/antonioribeiro/google2fa"><img alt="PHP" src="https://img.shields.io/badge/PHP-5.4%20--%207.2-brightgreen.svg?style=flat-square"></a>
+    <a href="https://travis-ci.org/antonioribeiro/google2fa-qrcode"><img alt="PHP" src="https://img.shields.io/badge/PHP-5.4%20--%207.2-brightgreen.svg?style=flat-square"></a>
 </p>
 
 ### QRCode For Google2FA
 
 The purpose of this package is to provide an easy way to plot QRCode for Google2FA. For documentation related to Google2FA, please check the [documentation of the main package](https://github.com/antonioribeiro/google2fa).  
- 
+
 ## Requirements
 
 - PHP 5.4+
@@ -33,16 +33,16 @@ Use Composer to install it:
 
 ```php
 use PragmaRX\Google2FAQRCode\Google2FA;
-    
+
 $google2fa = new Google2FA();
-    
+
 return $google2fa->generateSecretKey();
 ```
 
 ## Generating QRCodes
 
-The securer way of creating QRCode is to do it yourself or using a library. First you have to install the BaconQrCode package, as stated above, then you just have to generate the inline string using:
- 
+The securer way of creating QRCode is to do it yourself. You just have to generate the inline string using:
+
 ```php
 $inlineUrl = $google2fa->getQRCodeInline(
     $companyName,
