@@ -15,7 +15,7 @@
 
 ### QRCode For Google2FA
 
-The purpose of this package is to provide an easy way to plot QRCode for Google2FA. For documentation related to Google2FA, please check the [documentation of the main package](https://github.com/antonioribeiro/google2fa).  
+This is package is [Goole2FA](https://github.com/antonioribeiro/google2fa) integrated with a QRCode generator, providing an easy way to plot QRCode for your two factor authentication. For documentation related to Google2FA, please check the [documentation of the main package](https://github.com/antonioribeiro/google2fa).  
  
 ## Requirements
 
@@ -25,7 +25,9 @@ The purpose of this package is to provide an easy way to plot QRCode for Google2
 
 Use Composer to install it:
 
-    composer require pragmarx/google2fa-qrcode
+```
+composer require pragmarx/google2fa-qrcode
+```
 
 ## Using It
 
