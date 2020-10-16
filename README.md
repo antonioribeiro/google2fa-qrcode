@@ -93,6 +93,26 @@ $secret = $request->input('secret');
 $valid = $google2fa->verifyKey($user->google2fa_secret, $secret);
 ```
 
+## Replacing the QRCode rendering service
+
+If you want to use a different service, you just have to 
+
+```php
+$google2fa->setQrcodeService(new YourService())
+          ->getQRCodeInline(
+              $companyName,
+              $companyEmail,
+              $secretKey
+          );
+```
+
+## Built-in QRCode rendering services
+
+Beginning on version 2.0 the rendering service is optional, so you have to manually install one of those packages in order to generate QRCodes: 
+
+- [BaconQrCode](https://github.com/Bacon/BaconQrCode): renders PNG by default, but requires the Imagick PHP extension.
+- [chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode): renders SVG by default and don't require the Imagick PHP extension.
+
 ## Tests
 
 The package tests were written with [PHPUnit](https://phpunit.de/).
