@@ -6,6 +6,7 @@
 - No need to install the Imagick extension
 - Allow users to define their on QRCode service renderer
 - Breaking change: beginning on version 2.0 the rendering service is optional, so you have to manually install one of those packages in order to generate QRCodes: [BaconQrCode](https://github.com/Bacon/BaconQrCode): renders PNG by default, but requires the Imagick PHP extension. [chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode): renders SVG by default and don't require the Imagick PHP extension.
+- Add PHP 8.0 compatibility
 
 ## [1.0.2] - 2018-10-10
 ### Changed
