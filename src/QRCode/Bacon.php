@@ -23,19 +23,7 @@ class Bacon implements QRCodeServiceContract
      */
     public function __construct($imageBackEnd = null)
     {
-        if ($this->getBaconQRCodeVersion() === 1) {
-            if ($imageBackEnd instanceof RendererInterface) {
-                $this->imageBackEnd = $imageBackEnd;
-            } else {
-                $this->imageBackEnd = new Png();
-            }
-        } else {
-            if ($imageBackEnd instanceof ImageBackEndInterface) {
-                $this->imageBackEnd = $imageBackEnd;
-            } else {
-                $this->imageBackEnd = new ImagickImageBackEnd();
-            }
-        }
+        $this->instantiate($imageBackEnd);
     }
 
     /**
@@ -117,5 +105,39 @@ class Bacon implements QRCodeServiceContract
             class_exists('BaconQrCode\Writer')
             ? 1
             : 2;
+    }
+
+    /**
+     * Check if Imagick is available
+     *
+     * @return int
+     */
+    public function imagickIsAvailable()
+    {
+        return extension_loaded('imagick');
+    }
+
+    /**
+     * @param \BaconQrCode\Renderer\Image\ImageBackEndInterface|null $imageBackEnd
+     */
+    protected function instantiate(?ImageBackEndInterface $imageBackEnd): void
+    {
+        if (!$this->imagickIsAvailable()) {
+            return;
+        }
+
+        if ($this->getBaconQRCodeVersion() === 1) {
+            if ($imageBackEnd instanceof RendererInterface) {
+                $this->imageBackEnd = $imageBackEnd;
+            } else {
+                $this->imageBackEnd = new Png();
+            }
+        } else {
+            if ($imageBackEnd instanceof ImageBackEndInterface) {
+                $this->imageBackEnd = $imageBackEnd;
+            } else {
+                $this->imageBackEnd = new ImagickImageBackEnd();
+            }
+        }
     }
 }
