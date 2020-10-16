@@ -76,7 +76,7 @@ class Google2FATest extends TestCase
         $this->google2fa->setQrcodeService(new Chillerlan());
 
         $this->assertStringStartsWith(
-            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJxci1z',
+            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMj',
             $this->getQRCode()
         );
     }
