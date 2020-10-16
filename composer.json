@@ -19,9 +19,9 @@
         "khanamiryan/qrcode-detector-decoder": "^1.0",
         "libern/qr-code-reader": "^1.0.9",
         "bacon/bacon-qr-code": "^2.0",
-        "chillerlan/php-qrcode": "^4.2"
+        "chillerlan/php-qrcode": "^1.0|^2.0|^3.0|^4.0"
     },
-    "autoload": {
+     "autoload": {
         "psr-4": {
             "PragmaRX\\Google2FAQRCode\\": "src/",
             "PragmaRX\\Google2FAQRCode\\Tests\\": "tests/"
