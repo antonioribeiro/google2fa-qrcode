@@ -18,11 +18,11 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - yes '' | pecl install imagick
   - |
     if [[ "$TRAVIS_PHP_VERSION" == 'nightly' ]]; then
       travis_retry composer update --ignore-platform-reqs --no-interaction --prefer-dist
     else
+      yes '' | pecl install imagick
       travis_retry composer update --no-interaction --prefer-dist
     fi
 

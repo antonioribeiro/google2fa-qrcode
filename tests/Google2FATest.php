@@ -47,6 +47,11 @@ class Google2FATest extends TestCase
 
     public function testQrcodeInlineBacon()
     {
+        if (!extension_loaded('imagick'))
+        {
+            return;
+        }
+
         $this->google2fa->setQrcodeService(new Bacon());
 
         $this->assertEquals(
