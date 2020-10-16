@@ -25,6 +25,8 @@ install:
     else
       travis_retry composer update --no-interaction --prefer-dist
     fi
+  - travis_retry composer dump-autoload
+  - cat vendor/composer/autoload_real.php
 
 script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
