@@ -47,8 +47,7 @@ class Google2FATest extends TestCase
 
     public function testQrcodeInlineBacon()
     {
-        if (!(new Bacon())->imagickIsAvailable())
-        {
+        if (!(new Bacon())->imagickIsAvailable()) {
             $this->assertTrue(true);
 
             return;
@@ -61,21 +60,12 @@ class Google2FATest extends TestCase
             $this->readQRCode($this->getQRCode())
         );
 
-        if (
-            $this->google2fa->getQrCodeService()->getBaconQRCodeVersion() === 1
-        ) {
-            $google2fa = new Google2FA(new Png());
-            $this->assertEquals(
-                static::OTP_URL,
-                $this->readQRCode($this->getQRCode())
-            );
-        } else {
-            $google2fa = new Google2FA(new ImagickImageBackEnd());
-            $this->assertEquals(
-                static::OTP_URL,
-                $this->readQRCode($this->getQRCode())
-            );
-        }
+        $google2fa = new Google2FA(new Bacon(new \BaconQrCode\Renderer\Image\SvgImageBackEnd()));
+
+        $this->assertEquals(
+            static::OTP_URL,
+            $this->readQRCode($this->getQRCode())
+        );
     }
 
     public function testQrcodeInlineChillerlan()

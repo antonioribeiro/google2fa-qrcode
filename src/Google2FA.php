@@ -27,9 +27,13 @@ class Google2FA extends Google2FAPackage
      *
      * @param ImageBackEndInterface|RendererInterface|null $imageBackEnd
      */
-    public function __construct($imageBackEnd = null)
+    public function __construct($qrCodeService = null)
     {
-        $this->setQrCodeService($this->qrCodeServiceFactory());
+        $this->setQrCodeService(
+            empty($qrCodeService)
+                ? $this->qrCodeServiceFactory()
+                : $qrCodeService
+        );
     }
 
     /**

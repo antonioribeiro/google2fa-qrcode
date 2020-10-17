@@ -110,8 +110,26 @@ $google2fa->setQrcodeService(new YourService())
 
 Beginning on version 2.0 the rendering service is optional, so you have to manually install one of those packages in order to generate QRCodes: 
 
-- [BaconQrCode](https://github.com/Bacon/BaconQrCode): renders PNG by default, but requires the Imagick PHP extension.
-- [chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode): renders SVG by default and don't require the Imagick PHP extension.
+- [BaconQrCode](https://github.com/Bacon/BaconQrCode): renders PNG by default, but requires the Imagick PHP extension. You can configure it to use different backends, but you'll have to instantiate it yourself.
+- [chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode): renders SVG by default and don't require the Imagick PHP extension, but can also generate other formats, which may require Imagick. 
+
+## Using a diffent image backend
+
+```php
+$google2fa->setQrcodeService(
+    new \PragmaRX\Google2FAQRCode\QRCode\Bacon(
+        new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+    )
+);
+
+// or 
+
+$google2fa = new Google2FA(
+    new Bacon(
+        new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+    )
+);
+```
 
 ## Tests
 
