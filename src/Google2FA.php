@@ -97,7 +97,7 @@ class Google2FA extends Google2FAPackage
     public function qrCodeServiceFactory()
     {
         if (
-            class_exists('BaconQrCode\Writer') ||
+            class_exists('BaconQrCode\Writer') &&
             class_exists('BaconQrCode\Renderer\ImageRenderer')
         ) {
             return new Bacon();
