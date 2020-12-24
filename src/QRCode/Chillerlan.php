@@ -66,7 +66,6 @@ class Chillerlan implements QRCodeServiceContract
     {
         $renderer = new QRCode($this->getOptions());
 
-        return "data:image/svg+xml;base64," .
-            base64_encode($renderer->render($string));
+        return $renderer->render($string);
     }
 }
