@@ -18,7 +18,7 @@ use PragmaRX\Google2FAQRCode\Exceptions\MissingQrCodeServiceException;
 class Google2FA extends Google2FAPackage
 {
     /**
-     * @var ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     * @var \PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract $qrCodeService
      */
     protected $qrCodeService;
 
