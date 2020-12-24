@@ -4,7 +4,6 @@ namespace PragmaRX\Google2FAQRCode\QRCode;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use BaconQrCode\Writer as BaconQrCodeWriter;
 
 class Chillerlan implements QRCodeServiceContract
 {
@@ -13,7 +12,6 @@ class Chillerlan implements QRCodeServiceContract
     /**
      * Get QRCode options.
      *
-     * @param int $size
      * @return \chillerlan\QRCode\QROptions
      */
     protected function getOptions()
@@ -29,7 +27,7 @@ class Chillerlan implements QRCodeServiceContract
      * @param array $options
      * @return self
      */
-    protected function setOptions($options)
+    public function setOptions($options)
     {
         $this->options = $options;
 
