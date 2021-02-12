@@ -4,7 +4,6 @@ namespace PragmaRX\Google2FAQRCode\QRCode;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use BaconQrCode\Writer as BaconQrCodeWriter;
 
 class Chillerlan implements QRCodeServiceContract
 {
