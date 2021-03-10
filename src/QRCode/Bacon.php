@@ -13,18 +13,18 @@ use BaconQrCode\Writer;
 class Bacon implements QRCodeServiceContract
 {
     /**
-     * @var ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     * @var ImageBackEndInterface|RendererInterface|null $imageBackend
      */
-    protected $imageBackEnd;
+    protected $imageBackend;
 
     /**
      * Google2FA constructor.
      *
-     * @param ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     * @param ImageBackEndInterface|RendererInterface|null $imageBackend
      */
-    public function __construct($imageBackEnd = null)
+    public function __construct($imageBackend = null)
     {
-        $this->imageBackEnd = $imageBackEnd;
+        $this->imageBackend = $imageBackend;
     }
 
     /**
