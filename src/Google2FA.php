@@ -103,10 +103,7 @@ class Google2FA extends Google2FAPackage
             return new Bacon();
         }
 
-        if (
-            class_exists('chillerlan\QRCode') ||
-            class_exists('BaconQrCode\Renderer\ImageRenderer')
-        ) {
+        if (class_exists('chillerlan\QRCode\QRCode')) {
             return new Chillerlan();
         }
 
