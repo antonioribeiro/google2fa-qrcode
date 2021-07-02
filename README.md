@@ -19,7 +19,7 @@ This is package is [Goole2FA](https://github.com/antonioribeiro/google2fa) integ
  
 ## Requirements
 
-- PHP 5.4+
+- PHP 7.1+
 
 ## Installing
 
@@ -43,7 +43,7 @@ return $google2fa->generateSecretKey();
 
 ## Generating QRCodes
 
-The securer way of creating QRCode is to do it yourself or using a library. First you have to install the BaconQrCode package, as stated above, then you just have to generate the inline string using:
+The securer way of creating QRCode is to do it yourself or using a library. First you have to install the Chillerlan or BaconQrCode package, then you just have to generate the inline string using:
  
 ```php
 $inlineUrl = $google2fa->getQRCodeInline(
