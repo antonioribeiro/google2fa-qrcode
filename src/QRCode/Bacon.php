@@ -71,26 +71,26 @@ class Bacon implements QRCodeServiceContract
      */
     public function getImageBackend()
     {
-        if (empty($this->imageBackend)) {
-            $this->imageBackend = !$this->imagickIsAvailable()
+        if (empty($this->imageBackEnd)) {
+            $this->imageBackEnd = !$this->imagickIsAvailable()
                 ? new SvgImageBackEnd()
                 : new ImagickImageBackEnd();
         }
 
-        $this->setImageBackEnd($this->imageBackend);
+        $this->setImageBackEnd($this->imageBackEnd);
 
-        return $this->imageBackend;
+        return $this->imageBackEnd;
     }
 
     /**
      * Set image backend
      *
-     * @param $imageBackend
+     * @param $imageBackEnd
      * @return $this
      */
-    public function setImageBackend($imageBackend)
+    public function setImageBackend($imageBackEnd)
     {
-        $this->imageBackend = $imageBackend;
+        $this->imageBackEnd = $imageBackEnd;
 
         return $this;
     }
