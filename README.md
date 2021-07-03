@@ -19,7 +19,7 @@ This is package is [Goole2FA](https://github.com/antonioribeiro/google2fa) integ
  
 ## Requirements
 
-- PHP 5.4+
+- PHP 7.1+
 
 ## Installing
 

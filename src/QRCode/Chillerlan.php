@@ -4,7 +4,6 @@ namespace PragmaRX\Google2FAQRCode\QRCode;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use BaconQrCode\Writer as BaconQrCodeWriter;
 
 class Chillerlan implements QRCodeServiceContract
 {
@@ -50,7 +49,12 @@ class Chillerlan implements QRCodeServiceContract
             'eccLevel' => QRCode::ECC_L,
         ];
 
-        return array_merge($defaults, $this->options);
+	    // as per https://github.com/antonioribeiro/google2fa-qrcode/pull/11#issuecomment-778500498
+        $options = array_merge($defaults, $this->options);
+
+	    $options['imageBase64'] = false;
+
+        return $options;
     }
 
     /**
