@@ -25,13 +25,14 @@ class Google2FA extends Google2FAPackage
     /**
      * Google2FA constructor.
      *
+     * @param QRCodeServiceContract|null $qrCodeService
      * @param ImageBackEndInterface|RendererInterface|null $imageBackEnd
      */
-    public function __construct($qrCodeService = null)
+    public function __construct($qrCodeService = null, $imageBackEnd = null)
     {
         $this->setQrCodeService(
             empty($qrCodeService)
-                ? $this->qrCodeServiceFactory()
+                ? $this->qrCodeServiceFactory($imageBackEnd)
                 : $qrCodeService
         );
     }
@@ -94,13 +95,13 @@ class Google2FA extends Google2FAPackage
      *
      * @return \PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract
      */
-    public function qrCodeServiceFactory()
+    public function qrCodeServiceFactory($imageBackEnd = null)
     {
         if (
             class_exists('BaconQrCode\Writer') &&
             class_exists('BaconQrCode\Renderer\ImageRenderer')
         ) {
-            return new Bacon();
+            return new Bacon($imageBackEnd);
         }
 
         if (class_exists('chillerlan\QRCode\QRCode')) {

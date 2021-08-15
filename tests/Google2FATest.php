@@ -60,7 +60,7 @@ class Google2FATest extends TestCase
             $this->readQRCode($this->getQRCode())
         );
 
-        $google2fa = new Google2FA(new Bacon(new \BaconQrCode\Renderer\Image\SvgImageBackEnd()));
+        $google2fa = new Google2FA(null, new Bacon(new \BaconQrCode\Renderer\Image\SvgImageBackEnd()));
 
         $this->assertEquals(
             static::OTP_URL,
