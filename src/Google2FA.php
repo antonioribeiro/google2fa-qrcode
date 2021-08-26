@@ -7,6 +7,7 @@ use BaconQrCode\Renderer\Image\Png;
 use BaconQrCode\Renderer\ImageRenderer;
 use PragmaRX\Google2FAQRCode\QRCode\Bacon;
 use PragmaRX\Google2FAQRCode\QRCode\Chillerlan;
+use PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract;
 use BaconQrCode\Renderer\Image\RendererInterface;
 use BaconQrCode\Writer as BaconQrCodeWriter;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
