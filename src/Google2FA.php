@@ -10,7 +10,7 @@ use PragmaRX\Google2FAQRCode\QRCode\Chillerlan;
 use PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract;
 use BaconQrCode\Renderer\Image\RendererInterface;
 use BaconQrCode\Writer as BaconQrCodeWriter;
-use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd as ImagickImageBackEnd;
 use PragmaRX\Google2FA\Google2FA as Google2FAPackage;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Renderer\Image\ImageBackEndInterface;
