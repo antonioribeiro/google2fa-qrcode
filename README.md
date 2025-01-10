@@ -113,7 +113,7 @@ Beginning on version 2.0 the rendering service is optional, so you have to manua
 - [BaconQrCode](https://github.com/Bacon/BaconQrCode): renders PNG by default, but requires the Imagick PHP extension. You can configure it to use different backends, but you'll have to instantiate it yourself.
 - [chillerlan/php-qrcode](https://github.com/chillerlan/php-qrcode): renders SVG by default and don't require the Imagick PHP extension, but can also generate other formats, which may require Imagick. 
 
-## Using a diffent image backend
+## Using a different image backend
 
 ```php
 $google2fa->setQrcodeService(
