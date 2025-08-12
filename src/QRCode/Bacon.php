@@ -51,6 +51,10 @@ class Bacon implements QRCodeServiceContract
             return 'data:image/png;base64,' . base64_encode($data);
         }
 
+        if ($this->getImageBackEnd() instanceof SvgImageBackEnd) {
+            return 'data:image/svg+xml;base64,' . base64_encode($data);
+        }
+
         return $data;
     }
 
