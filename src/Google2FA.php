@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Google2FAQRCode;
 
+use BaconQrCode\Renderer\Image\ImageBackEndInterface;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Writer;
 use chillerlan\QRCode\QRCode;
@@ -18,16 +19,12 @@ class Google2FA extends Google2FAPackage
      */
     protected $qrCodeService;
 
-    /**
-     * Google2FA constructor.
-     *
-     * @param QRCodeServiceContract|null $qrCodeService
-     * @param mixed $imageBackEnd
-     */
-    public function __construct(?QRCodeServiceContract $qrCodeService = null, $imageBackEnd = null)
-    {
+    public function __construct(
+        ?QRCodeServiceContract $qrCodeService = null,
+        ?ImageBackEndInterface $imageBackEnd = null
+    ) {
         $this->setQRCodeService(
-            empty($qrCodeService)
+            $qrCodeService === null
                 ? $this->qrCodeServiceFactory($imageBackEnd)
                 : $qrCodeService
         );
@@ -51,48 +48,34 @@ class Google2FA extends Google2FAPackage
         $size = 200,
         $encoding = 'utf-8'
     ) {
-        if (empty($this->getQRCodeService())) {
+        $service = $this->getQRCodeService();
+
+        if ($service === null) {
             throw new MissingQRCodeServiceException(
                 'You need to install a service package or assign yourself the service to be used.'
             );
         }
 
-        return $this->qrCodeService->getQRCodeInline(
+        return $service->getQRCodeInline(
             $this->getQRCodeUrl($company, $holder, $secret),
             $size,
             $encoding
         );
     }
 
-    /**
-     * Service setter
-     *
-     * @return \PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract
-     */
-    public function getQRCodeService()
+    public function getQRCodeService(): ?QRCodeServiceContract
     {
         return $this->qrCodeService;
     }
 
-    /**
-     * Service setter
-     *
-     * @param QRCodeServiceContract $service
-     * @return self
-     */
-    public function setQRCodeService($service)
+    public function setQRCodeService(?QRCodeServiceContract $service): self
     {
         $this->qrCodeService = $service;
 
         return $this;
     }
 
-    /**
-     * Create the QR Code service instance
-     *
-     * @return \PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract
-     */
-    public function qrCodeServiceFactory($imageBackEnd = null)
+    public function qrCodeServiceFactory(?ImageBackEndInterface $imageBackEnd = null): ?QRCodeServiceContract
     {
         if (
             class_exists(Writer::class) &&

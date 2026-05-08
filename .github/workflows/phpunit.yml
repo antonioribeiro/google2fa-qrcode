@@ -1,4 +1,4 @@
-name: Tests
+name: PHPUnit
 
 on:
   push:
@@ -28,8 +28,9 @@ jobs:
           - { php: '8.3', phpunit: '^12.0', google2fa: '^9.0', bacon: '^3.0', chillerlan: '^6.0' }
 
           # PHP 8.4 — PHPUnit 12–13, both chillerlan & both bacon
+          # The PHPUnit 13 row also computes coverage for Codecov.
           - { php: '8.4', phpunit: '^12.0', google2fa: '^9.0', bacon: '^2.0', chillerlan: '^5.0' }
-          - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0', bacon: '^3.0', chillerlan: '^6.0' }
+          - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0', bacon: '^3.0', chillerlan: '^6.0', coverage: 'pcov' }
 
           # PHP 8.5 — PHPUnit 12–13, both chillerlan & both bacon
           - { php: '8.5', phpunit: '^12.0', google2fa: '^9.0', bacon: '^2.0', chillerlan: '^5.0' }
@@ -49,7 +50,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, intl, imagick
-          coverage: none
+          coverage: ${{ matrix.coverage || 'none' }}
           tools: composer:v2
 
       - name: Pin PHPUnit, google2fa, bacon, and chillerlan
@@ -75,13 +76,22 @@ jobs:
 
       - name: Run tests
         run: |
+          flags="--fail-on-skipped"
           if [ -z "${{ matrix.bacon }}" ]; then
-            # bacon absent — exclude bacon tests, include the fallback test
-            vendor/bin/phpunit --exclude-group=bacon --fail-on-skipped
+            flags="$flags --exclude-group=bacon"
           elif [ -z "${{ matrix.chillerlan }}" ]; then
-            # chillerlan absent — exclude chillerlan tests and the bacon-absent fallback
-            vendor/bin/phpunit --exclude-group=chillerlan --exclude-group=bacon-absent --fail-on-skipped
+            flags="$flags --exclude-group=chillerlan --exclude-group=bacon-absent"
           else
-            # both installed — exclude only the bacon-absent fallback so its skip doesn't trip --fail-on-skipped
-            vendor/bin/phpunit --exclude-group=bacon-absent --fail-on-skipped
+            flags="$flags --exclude-group=bacon-absent"
           fi
+          if [ -n "${{ matrix.coverage }}" ]; then
+            flags="$flags --coverage-clover=coverage.xml"
+          fi
+          vendor/bin/phpunit $flags
+
+      - name: Upload coverage to Codecov
+        if: matrix.coverage != ''
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false

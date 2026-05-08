@@ -10,27 +10,20 @@ use chillerlan\QRCode\QROptions;
 
 class Chillerlan implements QRCodeServiceContract
 {
+    /**
+     * @var array<string, mixed>
+     */
     protected $options = [];
 
-    /**
-     * Get QRCode options.
-     *
-     * @return \chillerlan\QRCode\QROptions
-     */
-    protected function getOptions()
+    protected function getOptions(): QROptions
     {
-        $options = new QROptions($this->buildOptionsArray());
-
-        return $options;
+        return new QROptions($this->buildOptionsArray());
     }
 
     /**
-     * Set QRCode options.
-     *
-     * @param array $options
-     * @return self
+     * @param array<string, mixed> $options
      */
-    public function setOptions($options)
+    public function setOptions(array $options): self
     {
         $this->options = $options;
 
@@ -38,12 +31,9 @@ class Chillerlan implements QRCodeServiceContract
     }
 
     /**
-     * Build the options array
-     *
-     * @param null $size
-     * @return array
+     * @return array<string, mixed>
      */
-    public function buildOptionsArray($size = null)
+    public function buildOptionsArray(?int $size = null): array
     {
         $defaults = [
             'version' => Version::AUTO,
@@ -73,6 +63,15 @@ class Chillerlan implements QRCodeServiceContract
     {
         $renderer = new QRCode($this->getOptions());
 
-        return 'data:image/svg+xml;base64,' . base64_encode($renderer->render($string));
+        $svg = $renderer->render($string);
+
+        // chillerlan's render() is typed as mixed in its source, but with
+        // outputInterface=QRMarkupSVG we always get a string back. Guard
+        // here so PHPStan can narrow the type cleanly.
+        if (!is_string($svg)) {
+            throw new \RuntimeException('chillerlan returned a non-string SVG payload.');
+        }
+
+        return 'data:image/svg+xml;base64,' . base64_encode($svg);
     }
 }

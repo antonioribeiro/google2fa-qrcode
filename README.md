@@ -3,12 +3,12 @@
 <p align="center">
     <a href="https://packagist.org/packages/pragmarx/google2fa-qrcode"><img alt="Latest Stable Version" src="https://img.shields.io/packagist/v/pragmarx/google2fa-qrcode.svg?style=flat-square"></a>
     <a href="LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
-    <a href="https://scrutinizer-ci.com/g/antonioribeiro/google2fa/?branch=master"><img alt="Code Quality" src="https://img.shields.io/scrutinizer/g/antonioribeiro/google2fa.svg?style=flat-square"></a>
-    <a href="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/tests.yml"><img alt="Build" src="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/tests.yml/badge.svg"></a>
+    <a href="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/phpunit.yml"><img alt="PHPUnit" src="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/phpunit.yml/badge.svg"></a>
+    <a href="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/phpstan.yml"><img alt="PHPStan" src="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/phpstan.yml/badge.svg"></a>
 </p>
 <p align="center">
     <a href="https://packagist.org/packages/pragmarx/google2fa-qrcode"><img alt="Downloads" src="https://img.shields.io/packagist/dt/pragmarx/google2fa-qrcode.svg?style=flat-square"></a>
-    <a href="https://scrutinizer-ci.com/g/antonioribeiro/google2fa/?branch=master"><img alt="Coverage" src="https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/google2fa.svg?style=flat-square"></a>
+    <a href="https://codecov.io/gh/antonioribeiro/google2fa-qrcode"><img alt="Coverage" src="https://codecov.io/gh/antonioribeiro/google2fa-qrcode/graph/badge.svg"></a>
     <a href="https://www.php.net"><img alt="PHP" src="https://img.shields.io/badge/PHP-8.1%20--%208.5-brightgreen.svg?style=flat-square"></a>
 </p>
 

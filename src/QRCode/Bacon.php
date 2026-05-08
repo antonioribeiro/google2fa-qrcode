@@ -2,27 +2,21 @@
 
 namespace PragmaRX\Google2FAQRCode\QRCode;
 
-use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Writer as BaconQrCodeWriter;
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\Image\ImageBackEndInterface;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 
 class Bacon implements QRCodeServiceContract
 {
     /**
-     * @var ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     * @var ImageBackEndInterface|null
      */
     protected $imageBackEnd;
 
-    /**
-     * Google2FA constructor.
-     *
-     * @param ImageBackEndInterface|RendererInterface|null $imageBackEnd
-     */
-    public function __construct($imageBackEnd = null)
+    public function __construct(?ImageBackEndInterface $imageBackEnd = null)
     {
         $this->imageBackEnd = $imageBackEnd;
     }
@@ -40,59 +34,41 @@ class Bacon implements QRCodeServiceContract
     {
         $renderer = new ImageRenderer(
             (new RendererStyle($size))->withSize($size),
-            $this->getImageBackEnd()
+            $this->getImageBackend()
         );
 
         $bacon = new Writer($renderer);
 
         $data = $bacon->writeString($string, $encoding);
 
-        if ($this->getImageBackEnd() instanceof ImagickImageBackEnd) {
+        if ($this->getImageBackend() instanceof ImagickImageBackEnd) {
             return 'data:image/png;base64,' . base64_encode($data);
         }
 
-        if ($this->getImageBackEnd() instanceof SvgImageBackEnd) {
+        if ($this->getImageBackend() instanceof SvgImageBackEnd) {
             return 'data:image/svg+xml;base64,' . base64_encode($data);
         }
 
         return $data;
     }
 
-    /**
-     * Check if Imagick is available
-     *
-     * @return int
-     */
-    public function imagickIsAvailable()
+    public function imagickIsAvailable(): bool
     {
         return extension_loaded('imagick');
     }
 
-    /**
-     * Get image backend
-     *
-     * @return ImageRenderer
-     */
-    public function getImageBackend()
+    public function getImageBackend(): ImageBackEndInterface
     {
-        if (empty($this->imageBackEnd)) {
-            $this->imageBackEnd = !$this->imagickIsAvailable()
-                ? new SvgImageBackEnd()
-                : new ImagickImageBackEnd();
+        if ($this->imageBackEnd === null) {
+            $this->imageBackEnd = $this->imagickIsAvailable()
+                ? new ImagickImageBackEnd()
+                : new SvgImageBackEnd();
         }
-
-        $this->setImageBackEnd($this->imageBackEnd);
 
         return $this->imageBackEnd;
     }
 
-    /**
-     * Set image backend
-     *
-     * @param $imageBackEnd
-     * @return $this
-     */
-    public function setImageBackend($imageBackEnd)
+    public function setImageBackend(ImageBackEndInterface $imageBackEnd): self
     {
         $this->imageBackEnd = $imageBackEnd;
 
