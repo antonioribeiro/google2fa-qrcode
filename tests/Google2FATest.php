@@ -17,6 +17,8 @@ class Google2FATest extends TestCase
 
     const OTP_URL = 'otpauth://totp/PragmaRX:acr+pragmarx@antoniocarlosribeiro.com?secret=ADUMJO5634NPDEKW&issuer=PragmaRX&algorithm=SHA1&digits=6&period=30';
 
+    protected $google2fa;
+
     public function setUp(): void
     {
         $this->google2fa = new Google2FA();
