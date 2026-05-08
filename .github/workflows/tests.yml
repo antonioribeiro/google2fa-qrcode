@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} / google2fa ${{ matrix.google2fa }} / bacon ${{ matrix.bacon }} / chillerlan ${{ matrix.chillerlan }}
+    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} / google2fa ${{ matrix.google2fa }} / bacon ${{ matrix.bacon || 'absent' }} / chillerlan ${{ matrix.chillerlan || 'absent' }}
 
     strategy:
       fail-fast: false
@@ -35,6 +35,12 @@ jobs:
           - { php: '8.5', phpunit: '^12.0', google2fa: '^9.0', bacon: '^2.0', chillerlan: '^5.0' }
           - { php: '8.5', phpunit: '^13.0', google2fa: '^9.0', bacon: '^3.0', chillerlan: '^6.0' }
 
+          # bacon-only — no chillerlan; verifies bacon path stands alone
+          - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0', bacon: '^3.0', chillerlan: '' }
+
+          # chillerlan-only — no bacon; verifies factory fallback to Chillerlan
+          - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0', bacon: '', chillerlan: '^6.0' }
+
     steps:
       - uses: actions/checkout@v4
 
@@ -50,8 +56,16 @@ jobs:
         run: |
           composer require --dev --no-update "phpunit/phpunit:${{ matrix.phpunit }}"
           composer require --no-update "pragmarx/google2fa:${{ matrix.google2fa }}"
-          composer require --dev --no-update "bacon/bacon-qr-code:${{ matrix.bacon }}"
-          composer require --dev --no-update "chillerlan/php-qrcode:${{ matrix.chillerlan }}"
+          if [ -n "${{ matrix.bacon }}" ]; then
+            composer require --dev --no-update "bacon/bacon-qr-code:${{ matrix.bacon }}"
+          else
+            composer remove --dev --no-update bacon/bacon-qr-code
+          fi
+          if [ -n "${{ matrix.chillerlan }}" ]; then
+            composer require --dev --no-update "chillerlan/php-qrcode:${{ matrix.chillerlan }}"
+          else
+            composer remove --dev --no-update chillerlan/php-qrcode
+          fi
 
       - name: Install dependencies
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=php+
@@ -60,4 +74,14 @@ jobs:
         run: php -m | grep -qi imagick
 
       - name: Run tests
-        run: vendor/bin/phpunit --fail-on-skipped
+        run: |
+          if [ -z "${{ matrix.bacon }}" ]; then
+            # bacon absent — exclude bacon tests, include the fallback test
+            vendor/bin/phpunit --exclude-group=bacon --fail-on-skipped
+          elif [ -z "${{ matrix.chillerlan }}" ]; then
+            # chillerlan absent — exclude chillerlan tests and the bacon-absent fallback
+            vendor/bin/phpunit --exclude-group=chillerlan --exclude-group=bacon-absent --fail-on-skipped
+          else
+            # both installed — exclude only the bacon-absent fallback so its skip doesn't trip --fail-on-skipped
+            vendor/bin/phpunit --exclude-group=bacon-absent --fail-on-skipped
+          fi

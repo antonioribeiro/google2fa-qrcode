@@ -2,14 +2,13 @@
 
 namespace PragmaRX\Google2FAQRCode\Tests;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use PragmaRX\Google2FAQRCode\Exceptions\MissingQRCodeServiceException;
+use PragmaRX\Google2FAQRCode\Google2FA;
 use PragmaRX\Google2FAQRCode\QRCode\Bacon;
 use PragmaRX\Google2FAQRCode\QRCode\Chillerlan;
-use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
-use BaconQrCode\Renderer\Image\Png;
-use PHPUnit\Framework\TestCase;
-use PragmaRX\Google2FAQRCode\Google2FA;
 use Zxing\QrReader;
-use PragmaRX\Google2FAQRCode\Exceptions\MissingQRCodeServiceException;
 
 class Google2FATest extends TestCase
 {
@@ -47,6 +46,10 @@ class Google2FATest extends TestCase
         $this->getQRCode();
     }
 
+    /**
+     * @group bacon
+     */
+    #[Group('bacon')]
     public function testQRCodeInlineBacon()
     {
         if (!(new Bacon())->imagickIsAvailable()) {
@@ -61,6 +64,10 @@ class Google2FATest extends TestCase
         );
     }
 
+    /**
+     * @group bacon
+     */
+    #[Group('bacon')]
     public function testQRCodeInlineBaconSvg()
     {
         $this->google2fa->setQRCodeService(
@@ -70,6 +77,10 @@ class Google2FATest extends TestCase
         $this->assertStringStartsWith('data:image/svg+xml;base64,', $this->getQRCode());
     }
 
+    /**
+     * @group chillerlan
+     */
+    #[Group('chillerlan')]
     public function testQRCodeInlineChillerlan()
     {
         $this->google2fa->setQRCodeService(new Chillerlan());
@@ -79,18 +90,41 @@ class Google2FATest extends TestCase
         $prefix = 'data:image/svg+xml;base64,';
         $this->assertStringStartsWith($prefix, $output);
 
-        // Decode and confirm the payload is real SVG markup. v5+ may
-        // prepend an XML declaration; v2-v4 emit the <svg> tag directly.
-        // Either way the decoded content must contain <svg.
+        // Decode and confirm the payload is real SVG markup.
         $decoded = base64_decode(substr($output, strlen($prefix)));
         $this->assertStringContainsString('<svg', $decoded);
     }
 
+    /**
+     * @group bacon
+     */
+    #[Group('bacon')]
     public function testFactoryPrefersBacon()
     {
         $this->assertInstanceOf(Bacon::class, $this->google2fa->qrCodeServiceFactory());
     }
 
+    /**
+     * Asserts the factory falls back to Chillerlan when Bacon is absent.
+     * Only meaningful in CI rows where Bacon has been removed; the default
+     * phpunit run excludes this group so the skip doesn't trip --fail-on-skipped.
+     *
+     * @group bacon-absent
+     */
+    #[Group('bacon-absent')]
+    public function testFactoryFallsBackToChillerlanWhenBaconAbsent()
+    {
+        if (class_exists(\BaconQrCode\Writer::class)) {
+            $this->markTestSkipped('Bacon is installed; factory prefers it.');
+        }
+
+        $this->assertInstanceOf(Chillerlan::class, $this->google2fa->qrCodeServiceFactory());
+    }
+
+    /**
+     * @group chillerlan
+     */
+    #[Group('chillerlan')]
     public function testSetQrCodeServiceIsFluent()
     {
         $result = $this->google2fa->setQRCodeService(new Chillerlan());
@@ -98,6 +132,10 @@ class Google2FATest extends TestCase
         $this->assertSame($this->google2fa, $result);
     }
 
+    /**
+     * @group chillerlan
+     */
+    #[Group('chillerlan')]
     public function testGetQrCodeServiceReturnsAssignedService()
     {
         $service = new Chillerlan();
@@ -106,6 +144,10 @@ class Google2FATest extends TestCase
         $this->assertSame($service, $this->google2fa->getQRCodeService());
     }
 
+    /**
+     * @group chillerlan
+     */
+    #[Group('chillerlan')]
     public function testConstructorAcceptsExplicitService()
     {
         $service = new Chillerlan();
@@ -114,6 +156,10 @@ class Google2FATest extends TestCase
         $this->assertSame($service, $google2fa->getQRCodeService());
     }
 
+    /**
+     * @group chillerlan
+     */
+    #[Group('chillerlan')]
     public function testChillerlanBuildOptionsArrayReturnsDefaults()
     {
         $options = (new Chillerlan())->buildOptionsArray();
