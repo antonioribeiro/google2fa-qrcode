@@ -4,22 +4,32 @@
     <a href="https://packagist.org/packages/pragmarx/google2fa-qrcode"><img alt="Latest Stable Version" src="https://img.shields.io/packagist/v/pragmarx/google2fa-qrcode.svg?style=flat-square"></a>
     <a href="LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
     <a href="https://scrutinizer-ci.com/g/antonioribeiro/google2fa/?branch=master"><img alt="Code Quality" src="https://img.shields.io/scrutinizer/g/antonioribeiro/google2fa.svg?style=flat-square"></a>
-    <a href="https://travis-ci.org/antonioribeiro/google2fa"><img alt="Build" src="https://img.shields.io/travis/antonioribeiro/google2fa.svg?style=flat-square"></a>
+    <a href="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/tests.yml"><img alt="Build" src="https://github.com/antonioribeiro/google2fa-qrcode/actions/workflows/tests.yml/badge.svg"></a>
 </p>
 <p align="center">
     <a href="https://packagist.org/packages/pragmarx/google2fa-qrcode"><img alt="Downloads" src="https://img.shields.io/packagist/dt/pragmarx/google2fa-qrcode.svg?style=flat-square"></a>
     <a href="https://scrutinizer-ci.com/g/antonioribeiro/google2fa/?branch=master"><img alt="Coverage" src="https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/google2fa.svg?style=flat-square"></a>
-    <a href="https://styleci.io/repos/24296182"><img alt="StyleCI" src="https://styleci.io/repos/24296182/shield"></a>
-    <a href="https://travis-ci.org/antonioribeiro/google2fa"><img alt="PHP" src="https://img.shields.io/badge/PHP-5.4%20--%208.0-brightgreen.svg?style=flat-square"></a>
+    <a href="https://www.php.net"><img alt="PHP" src="https://img.shields.io/badge/PHP-8.1%20--%208.5-brightgreen.svg?style=flat-square"></a>
 </p>
 
 ### QRCode For Google2FA
 
 This is package is [Goole2FA](https://github.com/antonioribeiro/google2fa) integrated with a QRCode generator, providing an easy way to plot QRCode for your two factor authentication. For documentation related to Google2FA, please check the [documentation of the main package](https://github.com/antonioribeiro/google2fa).  
  
-## Requirements
+## Version Compatibility
 
-- PHP 7.1+
+| PHP          | `pragmarx/google2fa-qrcode` |
+| ------------ | --------------------------- |
+| `7.1`        | `3.x`                       |
+| `7.2`        | `3.x`                       |
+| `7.3`        | `3.x`                       |
+| `7.4`        | `3.x`                       |
+| `8.0`        | `3.x`                       |
+| `8.1`        | `4.x`                       |
+| `8.2`        | `4.x`                       |
+| `8.3`        | `4.x`                       |
+| `8.4`        | `4.x`                       |
+| `8.5`        | `4.x`                       |
 
 ## Installing
 
