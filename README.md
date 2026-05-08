@@ -98,7 +98,7 @@ $valid = $google2fa->verifyKey($user->google2fa_secret, $secret);
 If you want to use a different service, you just have to 
 
 ```php
-$google2fa->setQrcodeService(new YourService())
+$google2fa->setQRCodeService(new YourService())
           ->getQRCodeInline(
               $companyName,
               $companyEmail,
@@ -116,7 +116,7 @@ Beginning on version 2.0 the rendering service is optional, so you have to manua
 ## Using a different image backend
 
 ```php
-$google2fa->setQrcodeService(
+$google2fa->setQRCodeService(
     new \PragmaRX\Google2FAQRCode\QRCode\Bacon(
         new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
     )

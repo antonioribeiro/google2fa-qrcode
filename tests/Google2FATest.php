@@ -9,7 +9,7 @@ use BaconQrCode\Renderer\Image\Png;
 use PHPUnit\Framework\TestCase;
 use PragmaRX\Google2FAQRCode\Google2FA;
 use Zxing\QrReader;
-use PragmaRX\Google2FAQRCode\Exceptions\MissingQrCodeServiceException;
+use PragmaRX\Google2FAQRCode\Exceptions\MissingQRCodeServiceException;
 
 class Google2FATest extends TestCase
 {
@@ -38,22 +38,22 @@ class Google2FATest extends TestCase
         );
     }
 
-    public function testQrcodeServiceMissing()
+    public function testQRCodeServiceMissing()
     {
-        $this->expectException(MissingQrCodeServiceException::class);
+        $this->expectException(MissingQRCodeServiceException::class);
 
-        $this->google2fa->setQrcodeService(null);
+        $this->google2fa->setQRCodeService(null);
 
-        $this->getQrCode();
+        $this->getQRCode();
     }
 
-    public function testQrcodeInlineBacon()
+    public function testQRCodeInlineBacon()
     {
         if (!(new Bacon())->imagickIsAvailable()) {
             $this->markTestSkipped('imagick extension not available');
         }
 
-        $this->google2fa->setQrcodeService(new Bacon());
+        $this->google2fa->setQRCodeService(new Bacon());
 
         $this->assertEquals(
             static::OTP_URL,
@@ -61,18 +61,18 @@ class Google2FATest extends TestCase
         );
     }
 
-    public function testQrcodeInlineBaconSvg()
+    public function testQRCodeInlineBaconSvg()
     {
-        $this->google2fa->setQrcodeService(
+        $this->google2fa->setQRCodeService(
             new Bacon(new \BaconQrCode\Renderer\Image\SvgImageBackEnd())
         );
 
         $this->assertStringContainsString('<svg', $this->getQRCode());
     }
 
-    public function testQrcodeInlineChillerlan()
+    public function testQRCodeInlineChillerlan()
     {
-        $this->google2fa->setQrcodeService(new Chillerlan());
+        $this->google2fa->setQRCodeService(new Chillerlan());
 
         $this->assertStringStartsWith(
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMj',
@@ -87,7 +87,7 @@ class Google2FATest extends TestCase
 
     public function testSetQrCodeServiceIsFluent()
     {
-        $result = $this->google2fa->setQrCodeService(new Chillerlan());
+        $result = $this->google2fa->setQRCodeService(new Chillerlan());
 
         $this->assertSame($this->google2fa, $result);
     }
@@ -95,9 +95,9 @@ class Google2FATest extends TestCase
     public function testGetQrCodeServiceReturnsAssignedService()
     {
         $service = new Chillerlan();
-        $this->google2fa->setQrCodeService($service);
+        $this->google2fa->setQRCodeService($service);
 
-        $this->assertSame($service, $this->google2fa->getQrCodeService());
+        $this->assertSame($service, $this->google2fa->getQRCodeService());
     }
 
     public function testConstructorAcceptsExplicitService()
@@ -105,7 +105,7 @@ class Google2FATest extends TestCase
         $service = new Chillerlan();
         $google2fa = new Google2FA($service);
 
-        $this->assertSame($service, $google2fa->getQrCodeService());
+        $this->assertSame($service, $google2fa->getQRCodeService());
     }
 
     public function testChillerlanBuildOptionsArrayReturnsDefaults()
@@ -116,7 +116,7 @@ class Google2FATest extends TestCase
         $this->assertArrayHasKey('eccLevel', $options);
     }
 
-    public function getQrCode()
+    public function getQRCode()
     {
         return $this->google2fa->getQRCodeInline(
             'PragmaRX',

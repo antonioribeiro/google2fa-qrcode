@@ -6,7 +6,7 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Writer;
 use chillerlan\QRCode\QRCode;
 use PragmaRX\Google2FA\Google2FA as Google2FAPackage;
-use PragmaRX\Google2FAQRCode\Exceptions\MissingQrCodeServiceException;
+use PragmaRX\Google2FAQRCode\Exceptions\MissingQRCodeServiceException;
 use PragmaRX\Google2FAQRCode\QRCode\Bacon;
 use PragmaRX\Google2FAQRCode\QRCode\Chillerlan;
 use PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract;
@@ -26,7 +26,7 @@ class Google2FA extends Google2FAPackage
      */
     public function __construct(?QRCodeServiceContract $qrCodeService = null, $imageBackEnd = null)
     {
-        $this->setQrCodeService(
+        $this->setQRCodeService(
             empty($qrCodeService)
                 ? $this->qrCodeServiceFactory($imageBackEnd)
                 : $qrCodeService
@@ -51,8 +51,8 @@ class Google2FA extends Google2FAPackage
         $size = 200,
         $encoding = 'utf-8'
     ) {
-        if (empty($this->getQrCodeService())) {
-            throw new MissingQrCodeServiceException(
+        if (empty($this->getQRCodeService())) {
+            throw new MissingQRCodeServiceException(
                 'You need to install a service package or assign yourself the service to be used.'
             );
         }
@@ -69,7 +69,7 @@ class Google2FA extends Google2FAPackage
      *
      * @return \PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract
      */
-    public function getQrCodeService()
+    public function getQRCodeService()
     {
         return $this->qrCodeService;
     }
@@ -80,7 +80,7 @@ class Google2FA extends Google2FAPackage
      * @param QRCodeServiceContract $service
      * @return self
      */
-    public function setQrCodeService($service)
+    public function setQRCodeService($service)
     {
         $this->qrCodeService = $service;
 
