@@ -2,24 +2,19 @@
 
 namespace PragmaRX\Google2FAQRCode;
 
-use BaconQrCode\Writer;
-use BaconQrCode\Renderer\Image\Png;
 use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Writer;
+use chillerlan\QRCode\QRCode;
+use PragmaRX\Google2FA\Google2FA as Google2FAPackage;
+use PragmaRX\Google2FAQRCode\Exceptions\MissingQrCodeServiceException;
 use PragmaRX\Google2FAQRCode\QRCode\Bacon;
 use PragmaRX\Google2FAQRCode\QRCode\Chillerlan;
 use PragmaRX\Google2FAQRCode\QRCode\QRCodeServiceContract;
-use BaconQrCode\Renderer\Image\RendererInterface;
-use BaconQrCode\Writer as BaconQrCodeWriter;
-use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
-use PragmaRX\Google2FA\Google2FA as Google2FAPackage;
-use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Renderer\Image\ImageBackEndInterface;
-use PragmaRX\Google2FAQRCode\Exceptions\MissingQrCodeServiceException;
 
 class Google2FA extends Google2FAPackage
 {
     /**
-     * @var ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     * @var QRCodeServiceContract|null
      */
     protected $qrCodeService;
 
@@ -27,9 +22,9 @@ class Google2FA extends Google2FAPackage
      * Google2FA constructor.
      *
      * @param QRCodeServiceContract|null $qrCodeService
-     * @param ImageBackEndInterface|RendererInterface|null $imageBackEnd
+     * @param mixed $imageBackEnd
      */
-    public function __construct($qrCodeService = null, $imageBackEnd = null)
+    public function __construct(?QRCodeServiceContract $qrCodeService = null, $imageBackEnd = null)
     {
         $this->setQrCodeService(
             empty($qrCodeService)
@@ -82,6 +77,7 @@ class Google2FA extends Google2FAPackage
     /**
      * Service setter
      *
+     * @param QRCodeServiceContract $service
      * @return self
      */
     public function setQrCodeService($service)
@@ -99,13 +95,13 @@ class Google2FA extends Google2FAPackage
     public function qrCodeServiceFactory($imageBackEnd = null)
     {
         if (
-            class_exists('BaconQrCode\Writer') &&
-            class_exists('BaconQrCode\Renderer\ImageRenderer')
+            class_exists(Writer::class) &&
+            class_exists(ImageRenderer::class)
         ) {
             return new Bacon($imageBackEnd);
         }
 
-        if (class_exists('chillerlan\QRCode\QRCode')) {
+        if (class_exists(QRCode::class)) {
             return new Chillerlan();
         }
 
