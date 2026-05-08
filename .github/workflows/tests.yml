@@ -1,0 +1,68 @@
+name: Tests
+
+on:
+  push:
+    branches: [master, main, '*.x']
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} / google2fa ${{ matrix.google2fa }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # PHP 7.1 — google2fa 5–7, PHPUnit 7
+          - { php: '7.1', phpunit: '^7.5',  google2fa: '^5.0' }
+          - { php: '7.1', phpunit: '^7.5',  google2fa: '^7.0' }
+
+          # PHP 7.2 — PHPUnit 8
+          - { php: '7.2', phpunit: '^8.0',  google2fa: '^7.0' }
+
+          # PHP 7.3 / 7.4 — PHPUnit 9
+          - { php: '7.3', phpunit: '^9.0',  google2fa: '^8.0' }
+          - { php: '7.4', phpunit: '^9.0',  google2fa: '^8.0' }
+
+          # PHP 8.0
+          - { php: '8.0', phpunit: '^9.0',  google2fa: '^8.0' }
+
+          # PHP 8.1 — PHPUnit 9–10
+          - { php: '8.1', phpunit: '^9.0',  google2fa: '^8.0' }
+          - { php: '8.1', phpunit: '^10.0', google2fa: '^8.0' }
+
+          # PHP 8.2 — PHPUnit 10–11
+          - { php: '8.2', phpunit: '^10.0', google2fa: '^8.0' }
+          - { php: '8.2', phpunit: '^11.0', google2fa: '^9.0' }
+
+          # PHP 8.3 — PHPUnit 11–12
+          - { php: '8.3', phpunit: '^11.0', google2fa: '^9.0' }
+          - { php: '8.3', phpunit: '^12.0', google2fa: '^9.0' }
+
+          # PHP 8.4 — PHPUnit 12–13
+          - { php: '8.4', phpunit: '^12.0', google2fa: '^9.0' }
+          - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0' }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, intl, imagick
+          coverage: none
+          tools: composer:v2
+
+      - name: Pin PHPUnit and google2fa
+        run: |
+          composer require --dev --no-update "phpunit/phpunit:${{ matrix.phpunit }}"
+          composer require --no-update "pragmarx/google2fa:${{ matrix.google2fa }}"
+
+      - name: Install dependencies
+        run: composer update --no-interaction --prefer-dist
+
+      - name: Run tests
+        run: vendor/bin/phpunit
