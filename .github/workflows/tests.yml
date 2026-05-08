@@ -55,7 +55,7 @@ jobs:
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=php+
 
       - name: Verify imagick is loaded
-        run: php -r "exit(extension_loaded('imagick') ? 0 : 1);"
+        run: php -m | grep -qi imagick
 
       - name: Run tests
         run: vendor/bin/phpunit --fail-on-skipped
