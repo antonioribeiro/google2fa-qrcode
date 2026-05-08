@@ -50,9 +50,7 @@ class Google2FATest extends TestCase
     public function testQrcodeInlineBacon()
     {
         if (!(new Bacon())->imagickIsAvailable()) {
-            $this->assertTrue(true);
-
-            return;
+            $this->markTestSkipped('imagick extension not available');
         }
 
         $this->google2fa->setQrcodeService(new Bacon());
@@ -61,13 +59,15 @@ class Google2FATest extends TestCase
             static::OTP_URL,
             $this->readQRCode($this->getQRCode())
         );
+    }
 
-        $google2fa = new Google2FA(null, new Bacon(new \BaconQrCode\Renderer\Image\SvgImageBackEnd()));
-
-        $this->assertEquals(
-            static::OTP_URL,
-            $this->readQRCode($this->getQRCode())
+    public function testQrcodeInlineBaconSvg()
+    {
+        $this->google2fa->setQrcodeService(
+            new Bacon(new \BaconQrCode\Renderer\Image\SvgImageBackEnd())
         );
+
+        $this->assertStringContainsString('<svg', $this->getQRCode());
     }
 
     public function testQrcodeInlineChillerlan()
@@ -78,6 +78,42 @@ class Google2FATest extends TestCase
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMj',
             $this->getQRCode()
         );
+    }
+
+    public function testFactoryPrefersBacon()
+    {
+        $this->assertInstanceOf(Bacon::class, $this->google2fa->qrCodeServiceFactory());
+    }
+
+    public function testSetQrCodeServiceIsFluent()
+    {
+        $result = $this->google2fa->setQrCodeService(new Chillerlan());
+
+        $this->assertSame($this->google2fa, $result);
+    }
+
+    public function testGetQrCodeServiceReturnsAssignedService()
+    {
+        $service = new Chillerlan();
+        $this->google2fa->setQrCodeService($service);
+
+        $this->assertSame($service, $this->google2fa->getQrCodeService());
+    }
+
+    public function testConstructorAcceptsExplicitService()
+    {
+        $service = new Chillerlan();
+        $google2fa = new Google2FA($service);
+
+        $this->assertSame($service, $google2fa->getQrCodeService());
+    }
+
+    public function testChillerlanBuildOptionsArrayReturnsDefaults()
+    {
+        $options = (new Chillerlan())->buildOptionsArray();
+
+        $this->assertArrayHasKey('outputType', $options);
+        $this->assertArrayHasKey('eccLevel', $options);
     }
 
     public function getQrCode()
