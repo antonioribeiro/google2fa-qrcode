@@ -2,10 +2,8 @@
 
 namespace PragmaRX\Google2FAQRCode\QRCode;
 
-use Illuminate\Support\Str;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use BaconQrCode\Writer as BaconQrCodeWriter;
 
 class Chillerlan implements QRCodeServiceContract
 {
@@ -14,7 +12,6 @@ class Chillerlan implements QRCodeServiceContract
     /**
      * Get QRCode options.
      *
-     * @param int $size
      * @return \chillerlan\QRCode\QROptions
      */
     protected function getOptions()
@@ -30,7 +27,7 @@ class Chillerlan implements QRCodeServiceContract
      * @param array $options
      * @return self
      */
-    protected function setOptions($options)
+    public function setOptions($options)
     {
         $this->options = $options;
 
@@ -51,7 +48,13 @@ class Chillerlan implements QRCodeServiceContract
             'eccLevel' => QRCode::ECC_L,
         ];
 
-        return array_merge($defaults, $this->options);
+        $options = array_merge($defaults, $this->options);
+
+        // Let this package handle the base64 wrap so output is deterministic
+        // regardless of chillerlan's per-version defaults. See PR #12.
+        $options['imageBase64'] = false;
+
+        return $options;
     }
 
     /**
@@ -67,14 +70,6 @@ class Chillerlan implements QRCodeServiceContract
     {
         $renderer = new QRCode($this->getOptions());
 
-        $header = "data:image/svg+xml;base64,";
-
-        $image = $renderer->render($string);
-
-        if (strncmp($image, $header, strlen($header)) === 0) {
-            return $image;
-        }
-
-        return $header . base64_encode($image);
+        return 'data:image/svg+xml;base64,' . base64_encode($renderer->render($string));
     }
 }
