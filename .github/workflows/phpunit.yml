@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} / google2fa ${{ matrix.google2fa }} / bacon ${{ matrix.bacon || 'absent' }} / chillerlan ${{ matrix.chillerlan || 'absent' }}
+    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} / google2fa ${{ matrix.google2fa }} / bacon ${{ matrix.bacon || 'absent' }} / chillerlan ${{ matrix.chillerlan || 'absent' }}${{ matrix.coverage && ' / coverage' || '' }}
 
     strategy:
       fail-fast: false
@@ -43,7 +43,7 @@ jobs:
           - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0', bacon: '', chillerlan: '^6.0' }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
