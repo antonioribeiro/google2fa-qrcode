@@ -74,10 +74,16 @@ class Google2FATest extends TestCase
     {
         $this->google2fa->setQRCodeService(new Chillerlan());
 
-        $this->assertStringStartsWith(
-            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMj',
-            $this->getQRCode()
-        );
+        $output = $this->getQRCode();
+
+        $prefix = 'data:image/svg+xml;base64,';
+        $this->assertStringStartsWith($prefix, $output);
+
+        // Decode and confirm the payload is real SVG markup. v5+ may
+        // prepend an XML declaration; v2-v4 emit the <svg> tag directly.
+        // Either way the decoded content must contain <svg.
+        $decoded = base64_decode(substr($output, strlen($prefix)));
+        $this->assertStringContainsString('<svg', $decoded);
     }
 
     public function testFactoryPrefersBacon()
@@ -112,8 +118,8 @@ class Google2FATest extends TestCase
     {
         $options = (new Chillerlan())->buildOptionsArray();
 
-        $this->assertArrayHasKey('outputType', $options);
         $this->assertArrayHasKey('eccLevel', $options);
+        $this->assertArrayHasKey('version', $options);
     }
 
     public function getQRCode()

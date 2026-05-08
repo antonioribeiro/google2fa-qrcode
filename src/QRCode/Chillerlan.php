@@ -2,6 +2,9 @@
 
 namespace PragmaRX\Google2FAQRCode\QRCode;
 
+use chillerlan\QRCode\Common\EccLevel;
+use chillerlan\QRCode\Common\Version;
+use chillerlan\QRCode\Output\QRMarkupSVG;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 
@@ -43,16 +46,16 @@ class Chillerlan implements QRCodeServiceContract
     public function buildOptionsArray($size = null)
     {
         $defaults = [
-            'version' => QRCode::VERSION_AUTO,
-            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
-            'eccLevel' => QRCode::ECC_L,
+            'version' => Version::AUTO,
+            'outputInterface' => QRMarkupSVG::class,
+            'eccLevel' => EccLevel::L,
         ];
 
         $options = array_merge($defaults, $this->options);
 
         // Let this package handle the base64 wrap so output is deterministic
         // regardless of chillerlan's per-version defaults. See PR #12.
-        $options['imageBase64'] = false;
+        $options['outputBase64'] = false;
 
         return $options;
     }

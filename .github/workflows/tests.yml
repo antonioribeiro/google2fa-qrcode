@@ -9,31 +9,31 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} / google2fa ${{ matrix.google2fa }}
+    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} / google2fa ${{ matrix.google2fa }} / chillerlan ${{ matrix.chillerlan }}
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          # PHP 8.1 — PHPUnit 9–10
-          - { php: '8.1', phpunit: '^9.0',  google2fa: '^8.0' }
-          - { php: '8.1', phpunit: '^10.0', google2fa: '^8.0' }
+          # PHP 8.1 — PHPUnit 9–10, chillerlan v5 only (v6 needs PHP 8.2+)
+          - { php: '8.1', phpunit: '^9.0',  google2fa: '^8.0', chillerlan: '^5.0' }
+          - { php: '8.1', phpunit: '^10.0', google2fa: '^8.0', chillerlan: '^5.0' }
 
-          # PHP 8.2 — PHPUnit 10–11
-          - { php: '8.2', phpunit: '^10.0', google2fa: '^8.0' }
-          - { php: '8.2', phpunit: '^11.0', google2fa: '^9.0' }
+          # PHP 8.2 — PHPUnit 10–11, both chillerlan
+          - { php: '8.2', phpunit: '^10.0', google2fa: '^8.0', chillerlan: '^5.0' }
+          - { php: '8.2', phpunit: '^11.0', google2fa: '^9.0', chillerlan: '^6.0' }
 
-          # PHP 8.3 — PHPUnit 11–12
-          - { php: '8.3', phpunit: '^11.0', google2fa: '^9.0' }
-          - { php: '8.3', phpunit: '^12.0', google2fa: '^9.0' }
+          # PHP 8.3 — PHPUnit 11–12, both chillerlan
+          - { php: '8.3', phpunit: '^11.0', google2fa: '^9.0', chillerlan: '^5.0' }
+          - { php: '8.3', phpunit: '^12.0', google2fa: '^9.0', chillerlan: '^6.0' }
 
-          # PHP 8.4 — PHPUnit 12–13
-          - { php: '8.4', phpunit: '^12.0', google2fa: '^9.0' }
-          - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0' }
+          # PHP 8.4 — PHPUnit 12–13, both chillerlan
+          - { php: '8.4', phpunit: '^12.0', google2fa: '^9.0', chillerlan: '^5.0' }
+          - { php: '8.4', phpunit: '^13.0', google2fa: '^9.0', chillerlan: '^6.0' }
 
-          # PHP 8.5 — PHPUnit 12–13
-          - { php: '8.5', phpunit: '^12.0', google2fa: '^9.0' }
-          - { php: '8.5', phpunit: '^13.0', google2fa: '^9.0' }
+          # PHP 8.5 — PHPUnit 12–13, both chillerlan
+          - { php: '8.5', phpunit: '^12.0', google2fa: '^9.0', chillerlan: '^5.0' }
+          - { php: '8.5', phpunit: '^13.0', google2fa: '^9.0', chillerlan: '^6.0' }
 
     steps:
       - uses: actions/checkout@v4
@@ -46,10 +46,11 @@ jobs:
           coverage: none
           tools: composer:v2
 
-      - name: Pin PHPUnit and google2fa
+      - name: Pin PHPUnit, google2fa, and chillerlan
         run: |
           composer require --dev --no-update "phpunit/phpunit:${{ matrix.phpunit }}"
           composer require --no-update "pragmarx/google2fa:${{ matrix.google2fa }}"
+          composer require --dev --no-update "chillerlan/php-qrcode:${{ matrix.chillerlan }}"
 
       - name: Install dependencies
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=php+
