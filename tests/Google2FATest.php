@@ -2,6 +2,9 @@
 
 namespace PragmaRX\Google2FAQRCode\Tests;
 
+use chillerlan\QRCode\Common\EccLevel;
+use chillerlan\QRCode\Common\Version;
+use chillerlan\QRCode\Output\QRMarkupSVG;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use PragmaRX\Google2FAQRCode\Exceptions\MissingQRCodeServiceException;
@@ -40,6 +43,7 @@ class Google2FATest extends TestCase
     public function testQRCodeServiceMissing()
     {
         $this->expectException(MissingQRCodeServiceException::class);
+        $this->expectExceptionMessage('install a service package');
 
         $this->google2fa->setQRCodeService(null);
 
@@ -164,8 +168,24 @@ class Google2FATest extends TestCase
     {
         $options = (new Chillerlan())->buildOptionsArray();
 
-        $this->assertArrayHasKey('eccLevel', $options);
-        $this->assertArrayHasKey('version', $options);
+        $this->assertSame(EccLevel::L, $options['eccLevel']);
+        $this->assertSame(Version::AUTO, $options['version']);
+        $this->assertSame(QRMarkupSVG::class, $options['outputInterface']);
+        $this->assertFalse($options['outputBase64']);
+    }
+
+    /**
+     * @group chillerlan
+     */
+    #[Group('chillerlan')]
+    public function testChillerlanSetOptionsCannotOverrideOutputBase64()
+    {
+        $service = new Chillerlan();
+        $service->setOptions(['outputBase64' => true]);
+
+        // The package owns the base64 wrap, so user-supplied
+        // outputBase64 must be forced to false in the resolved options.
+        $this->assertFalse($service->buildOptionsArray()['outputBase64']);
     }
 
     public function getQRCode()
