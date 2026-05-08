@@ -67,7 +67,7 @@ class Google2FATest extends TestCase
             new Bacon(new \BaconQrCode\Renderer\Image\SvgImageBackEnd())
         );
 
-        $this->assertStringContainsString('<svg', $this->getQRCode());
+        $this->assertStringStartsWith('data:image/svg+xml;base64,', $this->getQRCode());
     }
 
     public function testQRCodeInlineChillerlan()
