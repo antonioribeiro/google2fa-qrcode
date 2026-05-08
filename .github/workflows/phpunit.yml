@@ -85,7 +85,7 @@ jobs:
             flags="$flags --exclude-group=bacon-absent"
           fi
           if [ -n "${{ matrix.coverage }}" ]; then
-            flags="$flags --coverage-clover=coverage.xml"
+            flags="$flags --coverage-clover=coverage.xml --coverage-filter=src"
           fi
           vendor/bin/phpunit $flags
 
